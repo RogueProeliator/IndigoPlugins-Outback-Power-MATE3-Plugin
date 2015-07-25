@@ -1,0 +1,9 @@
+{"devstatus": {
+"Sys_Time": 1387839044,
+"Sys_Batt_V": 48.4,
+"ports": [
+{ "Port": 1, "Dev": "GS","Type": "60Hz","Inv_I_L1": 14,"Chg_I_L1": 0,"Buy_I_L1": 0,"Sell_I_L1": 0,"VAC1_in_L1": 119,"VAC2_in_L1": 1,"VAC_out_L1": 112,"Inv_I_L2": 8,"Chg_I_L2": 0,"Buy_I_L2": 0,"Sell_I_L2": 0,"VAC1_in_L2": 120,"VAC2_in_L2": 16,"VAC_out_L2": 113,"AC_Input": "Grid","Batt_V": 48.4,"AC_mode": "AC DROP","INV_mode": "Inverting","Warn": ["none"],"Error": ["none"],"AUX": "disabled","RELAY": "disabled"},
+{ "Port": 3, "Dev": "CC","Type": "FM","Out_I": 0.0,"In_I": 0,"Batt_V": 48.7,"In_V": 15.4,"Out_kWh": 22.6,"Out_AH": 425,"CC_mode": "Silent","Error": ["none"],"Aux_mode": "Manual","AUX": "disabled"},
+{ "Port": 4, "Dev": "CC","Type": "FM","Out_I": 0.0,"In_I": 0,"Batt_V": 48.7,"In_V": 16.0,"Out_kWh": 19.4,"Out_AH": 366,"CC_mode": "Silent","Error": ["none"],"Aux_mode": "Manual","AUX": "disabled"},
+{ "Port": 5, "Dev": "CC","Type": "FM","Out_I": 0.0,"In_I": 0,"Batt_V": 48.8,"In_V": 15.3,"Out_kWh": 20.6,"Out_AH": 388,"CC_mode": "Silent","Error": ["none"],"Aux_mode": "Manual","AUX": "disabled"}
+]}}

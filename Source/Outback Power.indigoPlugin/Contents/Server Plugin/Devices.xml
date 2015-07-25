@@ -1,0 +1,282 @@
+<?xml version="1.0"?>
+<Devices>
+
+	<!-- a simple, one-way data reader for MATE3 devices -->
+	<Device type="sensor" id="mate3ControllerDevice">
+		<Name>MATE3 Controller</Name>
+		<ConfigUI>	
+			<Field id="commOptionsTitle" type="label" fontColor="darkGray">
+				<Label>COMMUNICATIONS OPTIONS</Label>
+			</Field>
+			<Field id="instructionSeparator2" type="separator" />
+			<Field id="httpHostAddress" type="textfield">
+				<Label>Hostname or IP Address:</Label>	
+			</Field>
+			<Field id="portNumber" type="textfield">
+				<Label>Network Port:</Label>
+			</Field>
+			<Field id="address" type="textfield" hidden='true' >
+				<Label/>
+			</Field>
+			<Field id="statusPollInterval" type="textfield" defaultvalue="180">
+				<Label>Status Poll Time (sec):</Label>
+			</Field>
+			
+			<Field id="voltageOptionsTitle" type="label" fontColor="darkGray">
+				<Label>VOLTAGE TRACKING</Label>
+			</Field>
+			<Field id="voltageOptionsSeparator2" type="separator" />
+			<Field id="enableVoltageTracking" type="checkbox">
+				<Label>Enable Tracking</Label>
+				<Description>Check to enable the tracking of the voltage into variables</Description>
+			</Field>
+			<Field id="voltageTrackingInterval" type="textfield" defaultValue="15" enabledBindingId="enableVoltageTracking" enabledBindingValue="true">
+				<Label>Tracking Interval:</Label>
+			</Field>
+			<Field id="voltageTrackingMinVariable" type="menu" enabledBindingId="enableVoltageTracking" enabledBindingValue="true">
+				<Label>MIN Voltage Variable:</Label>
+				<List class="indigo.variables" />
+			</Field>
+			<Field id="voltageTrackingMaxVariable" type="menu" enabledBindingId="enableVoltageTracking" enabledBindingValue="true">
+				<Label>MAX Voltage Variable:</Label>
+				<List class="indigo.variables" />
+			</Field>
+			<Field id="voltageTrackingAvgVariable" type="menu" enabledBindingId="enableVoltageTracking" enabledBindingValue="true">
+				<Label>AVERAGE Voltage Variable:</Label>
+				<List class="indigo.variables" />
+			</Field>
+			<Field id="voltageTrackingCountVariable" type="menu" enabledBindingId="enableVoltageTracking" enabledBindingValue="true">
+				<Label>REC. COUNT Voltage Variable:</Label>
+				<List class="indigo.variables" />
+			</Field>
+			
+			<!-- sensor device properties that are are explicitly setting -->
+			<Field id="SupportsOnState" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+			<Field id="SupportsSensorValue" type="checkbox" defaultValue="true" hidden="true">
+				<Label />
+			</Field>
+			<Field id="SupportsStatusRequest" type="checkbox" defaultValue="true" hidden="true">
+				<Label>Enable status request / refresh button:</Label>
+			</Field>
+			<Field id="AllowOnStateChange" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+		</ConfigUI>
+		<States>
+			<!-- we will automatically get a SensorValue state that we will use to store the -->
+			<!-- cumulative battery voltage -->
+			<State id="controllerSystemTime">
+				<ValueType>Integer</ValueType>
+				<TriggerLabel>System Time</TriggerLabel>
+				<ControlPageLabel>System Time</ControlPageLabel>
+			</State>
+			<State id="batteryVoltage">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>Battery Voltage</TriggerLabel>
+				<ControlPageLabel>Battery Voltage</ControlPageLabel>
+			</State>
+			<State id="lastUpdateRead">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Last Updated</TriggerLabel>
+				<ControlPageLabel>Last Updated</ControlPageLabel>
+			</State>
+		</States>
+	</Device>
+	
+	<!-- this device supports devices of type 60Hz -->
+	<Device type="sensor" id="inverterPort">
+		<Name>Inverter</Name>
+		<ConfigUI>
+			<Field id="parentController" type="menu">
+				<Label>Connected To:</Label>
+				<List class="indigo.devices" filter="self.mate3ControllerDevice" />
+			</Field>
+			<Field id="portNumber" type="menu">
+				<Label>Port Number:</Label>
+				<List>
+					<Option value="1">1</Option>
+					<Option value="2">2</Option>
+					<Option value="3">3</Option>
+					<Option value="4">4</Option>
+					<Option value="5">5</Option>
+				</List>
+			</Field>
+			<Field id="sensorValueState" type="menu">
+				<Label>Sensor Value Column:</Label>
+				<List>
+					<Option value="gs_Batt_V">Battery Voltage</Option>
+				</List>
+			</Field>
+			<Field id="deviceStateJSONPrefix" type="textfield" hidden="true" defaultValue="gs_">
+				<Label/>
+			</Field>
+			
+			<Field id="address" type="textfield" hidden='true' >
+				<Label/>
+			</Field>
+			
+			<!-- sensor device properties that are are explicitly setting -->
+			<Field id="SupportsOnState" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+			<Field id="SupportsSensorValue" type="checkbox" defaultValue="true" hidden="true">
+				<Label />
+			</Field>
+			<Field id="SupportsStatusRequest" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+			<Field id="AllowOnStateChange" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+		</ConfigUI>
+		<States>
+			<!-- state for each value type that will be read -->
+			<State id="gs_AC_Input">
+				<ValueType>String</ValueType>
+				<TriggerLabel>AC Input</TriggerLabel>
+				<ControlPageLabel>AC Input</ControlPageLabel>
+			</State>
+			<State id="gs_AC_mode">
+				<ValueType>String</ValueType>
+				<TriggerLabel>AC Mode</TriggerLabel>
+				<ControlPageLabel>AC Mode</ControlPageLabel>
+			</State>
+			<State id="gs_AUX">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Auxiliary</TriggerLabel>
+				<ControlPageLabel>Auxiliary</ControlPageLabel>
+			</State>
+			<State id="gs_Batt_V">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>Battery Voltage</TriggerLabel>
+				<ControlPageLabel>Battery Voltage</ControlPageLabel>
+			</State>
+			<State id="gs_INV_mode">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Inverter Mode</TriggerLabel>
+				<ControlPageLabel>Inverter Mode</ControlPageLabel>
+			</State>
+			<State id="gs_RELAY">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Relay Status</TriggerLabel>
+				<ControlPageLabel>Relay Status</ControlPageLabel>
+			</State>
+			<State id="gs_Type">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="gs_Warn">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Warnings</TriggerLabel>
+				<ControlPageLabel>Warnings</ControlPageLabel>
+			</State>
+			<State id="gs_Error">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Error</TriggerLabel>
+				<ControlPageLabel>Error</ControlPageLabel>
+			</State>
+		</States>
+	</Device>
+	
+	<!-- this device supports connected "Charge Controllers" -->
+	<Device type="sensor" id="chargeControllerPort">
+		<Name>Charge Controller</Name>
+		<ConfigUI>
+			<Field id="parentController" type="menu">
+				<Label>Connected To:</Label>
+				<List class="indigo.devices" filter="self.mate3ControllerDevice" />
+			</Field>
+			<Field id="portNumber" type="menu">
+				<Label>Port Number:</Label>
+				<List>
+					<Option value="1">1</Option>
+					<Option value="2">2</Option>
+					<Option value="3">3</Option>
+					<Option value="4">4</Option>
+					<Option value="5">5</Option>
+				</List>
+			</Field>
+			<Field id="sensorValueState" type="menu">
+				<Label>Sensor Value Column:</Label>
+				<List>
+					<Option value="cc_Batt_V">Battery Voltage</Option>
+					<Option value="cc_In_I">PV Amps DC</Option>
+					<Option value="cc_In_V">PV Voltage</Option>
+					<Option value="cc_Out_I">Charger Amps DC</Option>
+					<Option value="cc_Out_kWh">Out kWh</Option>
+				</List>
+			</Field>
+			<Field id="deviceStateJSONPrefix" type="textfield" hidden="true" defaultValue="cc_">
+				<Label/>
+			</Field>
+			
+			<Field id="address" type="textfield" hidden='true' >
+				<Label/>
+			</Field>
+			
+			<!-- sensor device properties that are are explicitly setting -->
+			<Field id="SupportsOnState" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+			<Field id="SupportsSensorValue" type="checkbox" defaultValue="true" hidden="true">
+				<Label />
+			</Field>
+			<Field id="SupportsStatusRequest" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+			<Field id="AllowOnStateChange" type="checkbox" defaultValue="false" hidden="true">
+				<Label />
+			</Field>
+		</ConfigUI>
+		<States>
+			<State id="cc_AUX">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Auxiliary</TriggerLabel>
+				<ControlPageLabel>Auxiliary</ControlPageLabel>
+			</State>
+			<State id="cc_Aux_mode">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Auxiliary Mode</TriggerLabel>
+				<ControlPageLabel>Auxiliary Mode</ControlPageLabel>
+			</State>
+			<State id="cc_Batt_V">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>Battery Voltage</TriggerLabel>
+				<ControlPageLabel>Battery Voltage</ControlPageLabel>
+			</State>
+			<State id="cc_ERROR">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Error</TriggerLabel>
+				<ControlPageLabel>Error</ControlPageLabel>
+			</State>
+			<State id="cc_In_I">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>PV Amps DC</TriggerLabel>
+				<ControlPageLabel>PV Amps DC</ControlPageLabel>
+			</State>
+			<State id="cc_In_V">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>PV Voltage</TriggerLabel>
+				<ControlPageLabel>PV Voltage</ControlPageLabel>
+			</State>
+			<State id="cc_Type">
+				<ValueType>String</ValueType>
+				<TriggerLabel>Type</TriggerLabel>
+				<ControlPageLabel>Type</ControlPageLabel>
+			</State>
+			<State id="cc_Out_I">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>Charger Amps DC</TriggerLabel>
+				<ControlPageLabel>Charger Amps DC</ControlPageLabel>
+			</State>
+			<State id="cc_Out_kWh">
+				<ValueType>Float</ValueType>
+				<TriggerLabel>Out kWh</TriggerLabel>
+				<ControlPageLabel>Out kWh</ControlPageLabel>
+			</State>
+		</States>
+	</Device>
+</Devices>

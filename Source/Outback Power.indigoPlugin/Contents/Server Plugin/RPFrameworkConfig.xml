@@ -1,0 +1,109 @@
+<RPFrameworkConfig>
+	<pluginConfig>
+		<guiConfiguration>
+			<databaseConnectionEnabled>%pp:enableDBLogging%</databaseConnectionEnabled>
+			<databaseConnectionType>0</databaseConnectionType>
+			<databaseConnectionDBName>%pp:sqliteFilePath%</databaseConnectionDBName>
+		</guiConfiguration>
+		<deviceMapping>
+			<device indigoId="mate3ControllerDevice" className="MATE3ControllerDevice" />
+			<device indigoId="inverterPort" className="MATE3ConnectedPortDevice" />
+			<device indigoId="chargeControllerPort" className="MATE3ConnectedPortDevice" />
+		</deviceMapping>
+		<devices>
+			<device indigoId="mate3ControllerDevice">
+				<params>
+					<param indigoId="httpHostAddress" paramType="ParamTypeString" isRequired="True">
+						<validationExpression><![CDATA[^[a-z\d\. ]+$]]></validationExpression>
+						<invalidValueMessage><![CDATA[Please enter the MATE3 controller's IP address or host name]]></invalidValueMessage>
+					</param>
+					<param indigoId="portNumber" paramType="ParamTypeInteger" isRequired="True">
+						<invalidValueMessage><![CDATA[Please enter the port number on which the MATE3 is listening]]></invalidValueMessage>
+					</param>
+					<param indigoId="statusPollInterval" paramType="ParamTypeInteger" isRequired="True">
+						<invalidValueMessage><![CDATA[Please enter the seconds (0-10000) between poll intervals]]></invalidValueMessage>
+						<minValue>0</minValue>
+						<maxValue>10000</maxValue>
+					</param>
+					<param indigoId="enableVoltageTracking" paramType="ParamTypeBoolean" isRequired="True" />
+					<param indigoId="voltageTrackingInterval" paramType="ParamTypeInteger" isRequired="False">
+						<invalidValueMessage><![CDATA[Please enter the the calculation interval in minutes (1-1440)]]></invalidValueMessage>
+						<minValue>1</minValue>
+						<maxValue>1440</maxValue>
+					</param>
+				</params>
+				<guiConfiguration>
+					<deviceAddressFormat><![CDATA[%ap:httpHostAddress%:%ap:portNumber%]]></deviceAddressFormat>
+					<updateStatusPollerIntervalProperty>statusPollInterval</updateStatusPollerIntervalProperty>
+					<updateStatusPollerActionId>updateDeviceStatesFromController</updateStatusPollerActionId>
+					<childDeviceDictionaryKeyFormat><![CDATA[%dp:portNumber%]]></childDeviceDictionaryKeyFormat>
+					<databaseConnectionEnabled>%pp:enableDBLogging%</databaseConnectionEnabled>
+					<databaseConnectionType>0</databaseConnectionType>
+					<databaseConnectionDBName>%pp:sqliteFilePath%</databaseConnectionDBName>
+				</guiConfiguration>
+				<deviceResponses>
+					<response id="portStatusResponse" respondToActionId="updateDeviceStatesFromController">
+						<criteriaFormatString></criteriaFormatString>
+						<matchExpression></matchExpression>
+						<effects>
+							<effect effectType="RESPONSE_EFFECT_CALLBACK" evalResult="false">
+								<updateParam>mate3StatusResponseReceived</updateParam>
+								<updateValueFormat></updateValueFormat>
+							</effect>
+						</effects>
+					</response>
+				</deviceResponses>
+			</device>
+			<device indigoId="inverterPort">
+				<params>
+					<param indigoId="parentController" paramType="ParamTypeString" isRequired="True">
+						<invalidValueMessage><![CDATA[Please select the MATE3 controller to which this charging port is attached]]></invalidValueMessage>
+					</param>
+					<param indigoId="portNumber" paramType="ParamTypeInteger" isRequired="True">
+						<invalidValueMessage><![CDATA[Please select the port number on the controller for this device]]></invalidValueMessage>
+						<minValue>1</minValue>
+						<maxValue>5</maxValue>
+					</param>
+					<param indigoId="sensorValueState" paramType="ParamTypeString" isRequired="True">
+						<invalidValueMessage><![CDATA[Please select the state to show in the value column]]></invalidValueMessage>
+					</param>
+				</params>
+				<guiConfiguration>
+					<deviceAddressFormat><![CDATA[Port %ap:portNumber%]]></deviceAddressFormat>
+					<deviceIsChildDevice>True</deviceIsChildDevice>
+					<deviceParentIdProperty>parentController</deviceParentIdProperty>
+				</guiConfiguration>
+			</device>
+			<device indigoId="chargeControllerPort">
+				<params>
+					<param indigoId="parentController" paramType="ParamTypeString" isRequired="True">
+						<invalidValueMessage><![CDATA[Please select the MATE3 controller to which this charging port is attached]]></invalidValueMessage>
+					</param>
+					<param indigoId="portNumber" paramType="ParamTypeInteger" isRequired="True">
+						<invalidValueMessage><![CDATA[Please select the port number on the controller for this device]]></invalidValueMessage>
+						<minValue>1</minValue>
+						<maxValue>5</maxValue>
+					</param>
+					<param indigoId="sensorValueState" paramType="ParamTypeString" isRequired="True">
+						<invalidValueMessage><![CDATA[Please select the state to show in the value column]]></invalidValueMessage>
+					</param>
+				</params>
+				<guiConfiguration>
+					<deviceAddressFormat><![CDATA[Port %ap:portNumber%]]></deviceAddressFormat>
+					<deviceIsChildDevice>True</deviceIsChildDevice>
+					<deviceParentIdProperty>parentController</deviceParentIdProperty>
+				</guiConfiguration>
+			</device>
+		</devices>
+		<actions>
+			<action indigoId="updateDeviceStatesFromController">
+				<commands>
+					<command>
+						<commandName>RESTFUL_GET</commandName>
+						<commandFormat><![CDATA[/Dev_status.cgi?&Port=0]]></commandFormat>
+					</command>
+				</commands>
+			</action>
+		</actions>
+	</pluginConfig>
+</RPFrameworkConfig>

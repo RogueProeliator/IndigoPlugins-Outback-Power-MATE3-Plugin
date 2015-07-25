@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<MenuItems>
+	<MenuItem id="toggleDebug">
+    	<Name>Toggle Debugging</Name>
+    	<CallbackMethod>toggleDebugEnabled</CallbackMethod>
+    </MenuItem>
+    <MenuItem id="menu1">
+        <Name>Check for Updates</Name>
+        <CallbackMethod>checkVersionNow</CallbackMethod>
+    </MenuItem>
+    <MenuItem id="actionSeparator1" type="separator" />
+    <MenuItem id="exportData">
+        <Name>Export Historical Data</Name>
+        <CallbackMethod>exportHistoricalData</CallbackMethod>
+        <ButtonTitle>Export</ButtonTitle>
+        <ConfigUI>
+        	<Field id="instructions" type="label">
+				<Label>
+					This will allow you to export the historical data from your Outback MATE3 controller for analysis. You must have Enable Tracking checked in the device configuration in order to utilize this feature.
+				</Label>
+			</Field>
+			<Field id="targetController" type="list">
+				<Label>Controller:</Label>
+				<List class="indigo.devices" filter="self.mate3ControllerDevice" /> 
+			</Field>
+			<Field id="exportDateInstructions" type="label" fontSize="small" alignWithControl="true">
+				<Label>The date range restricts the export to the dates entered; the date should be in mm/dd/yyyy format.</Label>
+			</Field>
+			<Field id="exportDateRangeStart" type="textfield" defaultvalue="">
+				<Label>Begin Date:</Label>
+			</Field>
+			<Field id="exportDateRangeEnd" type="textfield" defaultvalue="">
+				<Label>End Date:</Label>
+			</Field>
+			<Field id="exportFilename" type="textfield" defaultValue="~/Documents/MATE3Export.csv">
+				<Label>Export to File:</Label>
+			</Field>
+        </ConfigUI>
+    </MenuItem>
+</MenuItems>
